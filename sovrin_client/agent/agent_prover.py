@@ -107,9 +107,11 @@ class AgentProver:
         claim = body[DATA]
         li = self._getLinkByTarget(getCryptonym(issuerId))
         if li:
-            self.notifyResponseFromMsg(li.name, body.get(f.REQ_ID.nm))
-
             schemaId = ID(schemaId=claim[SCHEMA_SEQ_NO])
+            schema = await self.prover.wallet.getSchema(schemaId)
+
+            self.notifyResponseFromMsg(li.name, body.get(f.REQ_ID.nm))
+            self.notifyMsgListener('    Received claim "{}".\n'.format(schema.name))
 
             pk = await self.prover.wallet.getPublicKey(schemaId)
 
