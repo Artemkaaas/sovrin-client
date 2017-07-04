@@ -8,7 +8,7 @@ from anoncreds.protocol.types import SchemaKey, ID
 from anoncreds.protocol.types import ClaimRequest
 from sovrin_client.agent.constants import EVENT_NOTIFY_MSG, CLAIMS_LIST_FIELD
 from sovrin_client.agent.msg_constants import CLAIM, CLAIM_REQ_FIELD, CLAIM_FIELD, \
-    AVAIL_CLAIM_LIST, CLAIM_DEF_SEQ_NO, REVOC_REG_SEQ_NO, CLAIMS_SIGNATURE_FIELD, SCHEMA_SEQ_NO
+    AVAIL_CLAIM_LIST, CLAIM_DEF_SEQ_NO, REVOC_REG_SEQ_NO, CLAIMS_SIGNATURE_FIELD, SCHEMA_SEQ_NO, ISSUER_DID
 from sovrin_common.identity import Identity
 from plenum.common.constants import DATA
 from sovrin_client.client.wallet.attribute import Attribute
@@ -56,7 +56,7 @@ class AgentIssuer:
 
         claimDetails = {
             CLAIMS_SIGNATURE_FIELD: signature.to_str_dict(),
-            f.IDENTIFIER.nm: schema.issuerId,
+            ISSUER_DID: schema.issuerId,
             CLAIM_FIELD: json.dumps({k: v.to_str_dict() for k, v in claim.items()}),
             CLAIM_DEF_SEQ_NO: public_key.seqId,
             REVOC_REG_SEQ_NO: None,
