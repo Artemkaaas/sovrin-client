@@ -40,7 +40,7 @@ class ProofRequest:
             "nonce": self.nonce,
             "attributes": self.attributes,
             "verifiableAttributes": {k: v.to_str_dict() for k, v in self.verifiableAttributes.items()},
-            "predicates": {k: v.to_str_dict() for k, v in self.predicates.items()}
+            "requested_predicates": {k: v.to_str_dict() for k, v in self.predicates.items()}
         }
 
     @staticmethod
@@ -48,10 +48,10 @@ class ProofRequest:
         return ProofRequest(name=d['name'],
                             version=d['version'],
                             nonce=d['nonce'],
-                            attributes=d['attributes'],
+                            attributes=d['attributes'] if 'attributes' in d else [],
                             verifiableAttributes={k: AttributeInfo.from_str_dict(v) for k, v in
                                                   d['verifiableAttributes'].items()},
-                            predicates={k: PredicateGE.from_str_dict(v) for k, v in d['predicates'].items()})
+                            predicates={k: PredicateGE.from_str_dict(v) for k, v in d['requested_predicates'].items()})
 
     @property
     def attributeValues(self):

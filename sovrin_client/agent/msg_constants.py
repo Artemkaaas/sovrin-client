@@ -37,7 +37,7 @@ PROOF_REQ_SCHEMA_VERIFIABLE_ATTRIBUTES = 'verifiableAttributes'
 # Other
 CLAIM_NAME_FIELD = "claimName"
 REF_REQUEST_ID = "refRequestId"
-REVOC_REG_SEQ_NO = "revoc_ref_seq_no"
+REVOC_REG_SEQ_NO = "revoc_reg_seq_no"
 
 # Error constants
 ERR_NO_PROOF_REQUEST_SCHEMA_FOUND = 'Error: No proof request schema found'
