@@ -8,7 +8,7 @@ from plenum.common.types import f
 from anoncreds.protocol.types import FullProof, ProofInfo, ID, AggregatedProof, RequestedProof
 from anoncreds.protocol.types import ProofInput
 from anoncreds.protocol.verifier import Verifier
-from sovrin_client.agent.msg_constants import PROOF_STATUS, PROOF_FIELD,  PROOF_REQUEST, \
+from sovrin_client.agent.msg_constants import PROOF_STATUS, PROOF_FIELD, PROOF_REQUEST, \
     PROOF_REQUEST_FIELD, ERR_NO_PROOF_REQUEST_SCHEMA_FOUND
 from sovrin_client.client.wallet.link import Link
 from sovrin_common.util import getNonceForProof
@@ -64,10 +64,10 @@ class AgentVerifier(Verifier):
                 # Log attributes that were verified
                 self.logger.info('verified {}: {}'.
                                  format(attribute.name, proof.requestedProof.revealed_attrs[uuid][1]))
-            # self.logger.info('Verified that proof "{}" contains attributes '
-            #                  'from claim(s) issued by: {}'.format(
-            #     proofName, ", ".join(
-            #         sorted([sk.issuerId for sk in proof.schemaKeys]))))
+            self.logger.info('Verified that proof "{}" contains attributes '
+                             'from claim(s) issued by: {}'.format(
+                proofName, ", ".join(
+                    sorted([v.issuer_did for k, v in proof.proofs.items()]))))
             await self._postProofVerif(proofName, link, frm)
         else:
             self.logger.info('Verification failed for proof {} from {} '
@@ -87,10 +87,10 @@ class AgentVerifier(Verifier):
                 proofRequest[PREDICATES] if PREDICATES in proofRequest else []
             )
 
-            op = OrderedDict([
-                (TYPE, PROOF_REQUEST),
-                (PROOF_REQUEST_FIELD, proofRequest.to_str_dict())
-            ])
+            op = {
+                TYPE: PROOF_REQUEST,
+                PROOF_REQUEST_FIELD: proofRequest.to_str_dict()
+            }
 
             self.signAndSendToLink(msg=op, linkName=link.name)
         else:

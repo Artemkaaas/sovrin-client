@@ -10,7 +10,7 @@ from plenum.common.util import getCryptonym
 from anoncreds.protocol.prover import Prover
 from anoncreds.protocol.types import SchemaKey, ID, Claims, ProofInput, AttributeValues
 from sovrin_client.agent.msg_constants import CLAIM_REQUEST, PROOF, CLAIM_FIELD, \
-    CLAIM_REQ_FIELD, PROOF_FIELD, REVEALED_ATTRS_FIELD, \
+    CLAIM_REQ_FIELD, PROOF_FIELD, \
     REQ_AVAIL_CLAIMS, ISSUER_DID, CLAIM_DEF_SEQ_NO, CLAIMS_SIGNATURE_FIELD, SCHEMA_SEQ_NO, PROOF_REQUEST_FIELD
 from sovrin_client.client.wallet.types import ProofRequest
 from sovrin_client.client.wallet.link import Link
@@ -59,7 +59,6 @@ class AgentProver:
             proverId=link.invitationNonce,
             reqNonRevoc=False)
 
-        # TODO link.invitationNonce should not be used here.
         # It has served its purpose by this point. Claim Requests do not need a nonce.
         public_key = await self.prover.wallet.getPublicKey(ID(schema_key))
         schema = await self.prover.wallet.getSchema(ID(schema_key))
@@ -139,15 +138,13 @@ class AgentProver:
 
         proof = await self.prover.presentProof(proofInput)
         proof.requestedProof.self_attested_attrs.update(proofRequest.selfAttestedAttrs)
-        op = OrderedDict([
-            (TYPE, PROOF),
-            (NONCE, link.invitationNonce),
-            (PROOF_FIELD, proof.to_str_dict()),
-            (PROOF_REQUEST_FIELD, proofRequest.to_str_dict()),
-            # TODO _F_ why do we need to send this? isn't the same data passed as keys in 'proof'?
-            (REVEALED_ATTRS_FIELD,
-             json.dumps({k: v.to_str_dict() for k, v in proofRequest.verifiableAttributes.items()}))
-        ])
+
+        op = {
+            TYPE: PROOF,
+            NONCE: link.invitationNonce,
+            PROOF_FIELD: proof.to_str_dict(),
+            PROOF_REQUEST_FIELD: proofRequest.to_str_dict()
+        }
 
         self.signAndSendToLink(msg=op, linkName=link.name)
 
