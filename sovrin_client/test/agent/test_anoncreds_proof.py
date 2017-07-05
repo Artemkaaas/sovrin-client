@@ -13,7 +13,6 @@ def test_proof_from_libsovrin_works(aliceAgent, aliceAcceptedFaber, aliceAccepte
     aliceAgent.sendReqClaim(faberLink, schemaKey)
 
     schema = faberAgent.issuer.wallet._schemasByKey[schemaKey]
-    pk = faberAgent.issuer.wallet._pks[schemaKey]
 
 
     # 2. check that claim is received from Faber

@@ -12,7 +12,6 @@ def test_claim_from_libsovrin_works(aliceAgent, aliceAcceptedFaber, aliceAccepte
     timeout = waits.expectedClaimsReceived()
 
     schema = faberAgent.issuer.wallet._schemasByKey[schemaKey]
-    pk = faberAgent.issuer.wallet._pks[schemaKey]
 
     async def create_claim_and_send_to_prover():
         claimReq = await aliceAgent.prover.createClaimRequest(
@@ -28,7 +27,7 @@ def test_claim_from_libsovrin_works(aliceAgent, aliceAcceptedFaber, aliceAccepte
                                                   attributes=attr)
         signature, claims = await faberAgent.issuer.issueClaim(ID(schemaKey=schemaKey), claimReq)
 
-        msg = get_claim_libsovrin_msg(signature, schema.seqId, pk.seqId)
+        msg = get_claim_libsovrin_msg(signature, schema.seqId)
 
         await aliceAgent.handleReqClaimResponse(msg)
 

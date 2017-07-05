@@ -1,12 +1,11 @@
 from anoncreds.protocol.utils import crypto_int_to_str, isCryptoInteger, intToArrayBytes
 
 
-def get_claim_request_libsovrin_msg(claim_req, schema_seq_no, claim_def_seq_no):
+def get_claim_request_libsovrin_msg(claim_req, schema_seq_no):
     return ({
         'type': 'CLAIM_REQUEST',
         'data': {
             'issuer_did': 'FuN98eH2eZybECWkofW6A9BKJxxnTatBCopfUiNxo6ZB',
-            'claim_def_seq_no': claim_def_seq_no,
             'blinded_ms': {
                 'prover_did': 'b1134a647eb818069c089e7694f63e6d',
                 'u': str(crypto_int_to_str(claim_req.U)),
@@ -18,7 +17,7 @@ def get_claim_request_libsovrin_msg(claim_req, schema_seq_no, claim_def_seq_no):
     })
 
 
-def get_claim_libsovrin_msg(signature, schema_seq_no, claim_def_seq_no):
+def get_claim_libsovrin_msg(signature, schema_seq_no):
     return ({'type': 'CLAIM',
              'refRequestId': 1498207862797639,
              'data': {
@@ -29,7 +28,6 @@ def get_claim_libsovrin_msg(signature, schema_seq_no, claim_def_seq_no):
                           '"status": ["graduated", "79954080701401061138041003494589205197191732193019334789897013390726508263804"], '
                           '"degree": ["Bachelor of Science, Marketing", "111351644242834420607747624840774158853435703856237568018084128306949040580032"]}',
                  'schema_seq_no': schema_seq_no,
-                 'claim_def_seq_no': claim_def_seq_no,
                  'revoc_reg_seq_no': None,
                  'issuer_did': 'FuN98eH2eZybECWkofW6A9BKJxxnTatBCopfUiNxo6ZB',
                  'claims_signature': {

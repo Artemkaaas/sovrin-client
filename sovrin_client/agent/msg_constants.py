@@ -18,7 +18,6 @@ PROOF_STATUS = 'PROOF_STATUS'
 
 
 ISSUER_DID = 'issuer_did'
-CLAIM_DEF_SEQ_NO = 'claim_def_seq_no'
 CLAIM_REQ_FIELD = 'blinded_ms'
 CLAIM_FIELD = 'claim'
 CLAIMS_SIGNATURE_FIELD = 'claims_signature'
