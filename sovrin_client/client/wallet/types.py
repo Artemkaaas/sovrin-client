@@ -37,7 +37,7 @@ class ProofRequest:
         return {
             "name": self.name,
             "version": self.version,
-            "nonce": self.nonce,
+            "nonce": str(self.nonce),
             "attributes": self.attributes,
             "verifiableAttributes": {k: v.to_str_dict() for k, v in self.verifiableAttributes.items()},
             "requested_predicates": {k: v.to_str_dict() for k, v in self.predicates.items()}
@@ -47,7 +47,7 @@ class ProofRequest:
     def from_str_dict(d):
         return ProofRequest(name=d['name'],
                             version=d['version'],
-                            nonce=d['nonce'],
+                            nonce=int(d['nonce']),
                             attributes=d['attributes'] if 'attributes' in d else [],
                             verifiableAttributes={k: AttributeInfo.from_str_dict(v) for k, v in
                                                   d['verifiableAttributes'].items()},

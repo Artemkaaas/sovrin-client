@@ -81,7 +81,7 @@ class AgentVerifier(Verifier):
             proofRequest = ProofRequest(
                 proofRequest[NAME],
                 proofRequest[VERSION],
-                str(getNonceForProof(link.invitationNonce)),
+                getNonceForProof(link.invitationNonce),
                 proofRequest[ATTRIBUTES],
                 proofRequest[VERIFIABLE_ATTRIBUTES] if VERIFIABLE_ATTRIBUTES in proofRequest else [],
                 proofRequest[PREDICATES] if PREDICATES in proofRequest else []

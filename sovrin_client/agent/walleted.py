@@ -784,7 +784,7 @@ class Walleted(AgentIssuer, AgentProver, AgentVerifier):
         if proofRequestsJson:
             for cr in proofRequestsJson:
                 proofRequests.append(
-                    ProofRequest(cr[NAME], cr[VERSION], str(getNonceForProof(linkNonce)), cr[ATTRIBUTES],
+                    ProofRequest(cr[NAME], cr[VERSION], getNonceForProof(linkNonce), cr[ATTRIBUTES],
                                  cr[VERIFIABLE_ATTRIBUTES] if VERIFIABLE_ATTRIBUTES in cr else [],
                                  cr[PREDICATES] if PREDICATES in cr else []))
 

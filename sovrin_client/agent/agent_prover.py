@@ -81,22 +81,21 @@ class AgentProver:
         link = self._getLinkByTarget(getCryptonym(body.get(IDENTIFIER)))
         proofRequest = body.get(PROOF_REQUEST_FIELD)
         proofRequest = ProofRequest.from_str_dict(proofRequest)
-        proofReqName = proofRequest.name
         proofReqExist = False
 
         for request in link.proofRequests:
-            if request.name == proofReqName:
+            if request.name == proofRequest.name:
                 proofReqExist = True
                 break
 
         self.notifyMsgListener('    Proof request {} received from {}.\n'
-                               .format(proofReqName, link.name))
+                               .format(proofRequest.name, link.name))
 
         if not proofReqExist:
             link.proofRequests.append(proofRequest)
         else:
             self.notifyMsgListener('    Proof request {} already exist.\n'
-                                   .format(proofReqName))
+                                   .format(proofRequest.name))
 
     async def handleReqClaimResponse(self, msg):
         body, _ = msg
@@ -129,7 +128,7 @@ class AgentProver:
     async def sendProofAsync(self, link: Link, proofRequest: ProofRequest):
         # TODO _F_ this nonce should be from the Proof Request, not from an
         # invitation
-        proofInput = ProofInput(nonce=int(proofRequest.nonce),
+        proofInput = ProofInput(nonce=proofRequest.nonce,
                                 revealedAttrs=proofRequest.verifiableAttributes,
                                 predicates=proofRequest.predicates)
         # TODO rename presentProof to buildProof or generateProof
