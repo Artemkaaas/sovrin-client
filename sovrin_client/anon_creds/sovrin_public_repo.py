@@ -7,7 +7,7 @@ from stp_core.loop.eventually import eventually
 from plenum.common.exceptions import NoConsensusYet, OperationError
 from stp_core.common.log import getlogger
 from plenum.common.constants import TARGET_NYM, TXN_TYPE, DATA, NAME, \
-    VERSION, TYPE, ORIGIN
+    VERSION, TYPE, ORIGIN, IDENTIFIER
 
 from sovrin_common.constants import GET_SCHEMA, SCHEMA, ATTR_NAMES, \
     GET_CLAIM_DEF, REF, CLAIM_DEF, PRIMARY, REVOCATION, GET_TXNS
@@ -54,6 +54,7 @@ class SovrinPublicRepo(PublicRepo):
         self.displayer = print
 
     async def getSchema(self, id: ID) -> Optional[Schema]:
+        data = None
         if id.schemaKey:
             op = {
                 TARGET_NYM: id.schemaKey.issuerId,
@@ -63,13 +64,18 @@ class SovrinPublicRepo(PublicRepo):
                     VERSION: id.schemaKey.version,
                 }
             }
+            data, seqNo = await self._sendGetReq(op)
+
         else:
             op = {
                 TXN_TYPE: GET_TXNS,
                 DATA: id.schemaId
             }
+            res, seqNo = await self._sendGetReq(op)
+            if res:
+                data = json.loads(res[DATA]) if res else {}
+                data[ORIGIN] = res[IDENTIFIER]
 
-        data, seqNo = await self._sendGetReq(op)
         return Schema(name=data[NAME],
                       version=data[VERSION],
                       attrNames=data[ATTR_NAMES],
@@ -78,6 +84,7 @@ class SovrinPublicRepo(PublicRepo):
 
     async def getPublicKey(self, id: ID = None,
                            signatureType='CL', seqId=None) -> Optional[PublicKey]:
+        data = None
         if id:
             op = {
                 TXN_TYPE: GET_CLAIM_DEF,
@@ -85,13 +92,16 @@ class SovrinPublicRepo(PublicRepo):
                 ORIGIN: id.schemaKey.issuerId,
                 SIGNATURE_TYPE: signatureType
             }
+            data, seqNo = await self._sendGetReq(op)
         else:
             op = {
                 TXN_TYPE: GET_TXNS,
                 DATA: seqId
             }
+            res, seqNo = await self._sendGetReq(op)
+            if res:
+                data = json.loads(res[DATA]) if res else {}
 
-        data, seqNo = await self._sendGetReq(op)
         if not data:
             return None
         data = data[PRIMARY]
