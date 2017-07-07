@@ -30,7 +30,7 @@ def get_claim_libsovrin_msg(signature, schema_seq_no):
                  'schema_seq_no': schema_seq_no,
                  'revoc_reg_seq_no': None,
                  'issuer_did': 'FuN98eH2eZybECWkofW6A9BKJxxnTatBCopfUiNxo6ZB',
-                 'claims_signature': {
+                 'signature': {
                      'non_revocation_claim': None,
                      'primary_claim': {
                          'm2': '{}'.format(crypto_int_to_str(signature.primaryClaim.m2)),

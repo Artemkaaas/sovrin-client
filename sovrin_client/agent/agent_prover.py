@@ -11,7 +11,7 @@ from anoncreds.protocol.prover import Prover
 from anoncreds.protocol.types import SchemaKey, ID, Claims, ProofInput, AttributeValues
 from sovrin_client.agent.msg_constants import CLAIM_REQUEST, PROOF, CLAIM_FIELD, \
     CLAIM_REQ_FIELD, PROOF_FIELD, \
-    REQ_AVAIL_CLAIMS, ISSUER_DID, CLAIMS_SIGNATURE_FIELD, SCHEMA_SEQ_NO, PROOF_REQUEST_FIELD
+    REQ_AVAIL_CLAIMS, ISSUER_DID, SCHEMA_SEQ_NO, PROOF_REQUEST_FIELD
 from sovrin_client.client.wallet.types import ProofRequest
 from sovrin_client.client.wallet.link import Link
 from sovrin_common.exceptions import LinkNotReady
@@ -112,7 +112,7 @@ class AgentProver:
             pk = await self.prover.wallet.getPublicKey(schemaId)
 
             claims = {k: AttributeValues.from_str_dict(v) for k, v in json.loads(claim[CLAIM_FIELD]).items()}
-            signature = Claims.from_str_dict(claim[CLAIMS_SIGNATURE_FIELD], pk.N)
+            signature = Claims.from_str_dict(claim[f.SIG.nm], pk.N)
 
             await self.prover.processClaim(schemaId, claims, signature)
         else:

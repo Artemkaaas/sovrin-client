@@ -1,5 +1,3 @@
-from abc import abstractmethod
-from typing import Dict, Any
 import json
 from plenum.common.types import f
 
@@ -8,7 +6,7 @@ from anoncreds.protocol.types import ID
 from anoncreds.protocol.types import ClaimRequest
 from sovrin_client.agent.constants import EVENT_NOTIFY_MSG, CLAIMS_LIST_FIELD
 from sovrin_client.agent.msg_constants import CLAIM, CLAIM_REQ_FIELD, CLAIM_FIELD, \
-    AVAIL_CLAIM_LIST, REVOC_REG_SEQ_NO, CLAIMS_SIGNATURE_FIELD, SCHEMA_SEQ_NO, ISSUER_DID
+    AVAIL_CLAIM_LIST, REVOC_REG_SEQ_NO, SCHEMA_SEQ_NO, ISSUER_DID
 from sovrin_common.identity import Identity
 from plenum.common.constants import DATA
 from sovrin_client.client.wallet.attribute import Attribute
@@ -54,7 +52,7 @@ class AgentIssuer:
         signature, claim = await self.issuer.issueClaim(schemaId, claimReq)
 
         claimDetails = {
-            CLAIMS_SIGNATURE_FIELD: signature.to_str_dict(),
+            f.SIG.nm: signature.to_str_dict(),
             ISSUER_DID: schema.issuerId,
             CLAIM_FIELD: json.dumps({k: v.to_str_dict() for k, v in claim.items()}),
             REVOC_REG_SEQ_NO: None,
